@@ -50,6 +50,15 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         }
 
         // Handles Trails
+        this.applyTrails()
+
+        // Refactored and Improved Collision Checks
+        this.applyCollisions()
+
+        this.applyVelocityAcceleration()
+    }
+
+    private applyTrails() {
         if(this.hasTrail && !this.smoothTrails) {
             if(this.trail.length > this.trailMaxLength)
                 this.trail.shift()
@@ -64,8 +73,9 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
                 this.trail[i].update()
             }
         } 
+    }
 
-        // Refactored and Improved Collision Checks
+    private applyCollisions() {
         if (this.collidedY) {
             if (this.collidedY && !this.changedY) {
                 this.velocity.y = -this.velocity.y * (this.bounce <= 0 ? 1 : this.bounce)
@@ -85,16 +95,16 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         } else {
             this.changedX = false
         }
+    }
 
+    private applyVelocityAcceleration() {
         // Apply Acceleration
         this.velocity.x += this.acceleration.x
         this.velocity.y += this.acceleration.y
         
-
         // Apply Velocity
         this.x += this.velocity.x
         this.y += this.velocity.y
-        
     }
 
     draw(context: CanvasRenderingContext2D) {
