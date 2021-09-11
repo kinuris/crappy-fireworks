@@ -1,10 +1,10 @@
 
-import { Drawable, Acceleration, Velocity, Updatable, Step, Collisions } from "../types";
+import { Drawable, Acceleration, Velocity, Updatable, Step, Collisions, Trail } from "../types";
 import { Color } from "../util/Color";
 import { Point } from "./Point";
 import { Rectangle } from "./Rectangle";
 
-export class Circle extends Point implements Acceleration, Velocity, Drawable, Updatable, Step, Collisions {
+export class Circle extends Point implements Acceleration, Velocity, Drawable, Updatable, Step, Collisions, Trail {
 
     private radius
     private radiusOriginal
@@ -49,12 +49,8 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
             this.checkCollisions(boundingBox)
         }
 
-        // Handles Trails
         this.applyTrails()
-
-        // Refactored and Improved Collision Checks
         this.applyCollisions()
-
         this.applyVelocityAcceleration()
     }
 
@@ -158,7 +154,6 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     }
     
     applySteps() {
-
         // Decreases Radius According to Steps
         if(this.steps < 1)
             return
@@ -172,6 +167,16 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         this.trailLifetime = trailLifetime
         this.trailMaxLength = trailMaxLength
         this.smoothTrails = smoothTrail
+
+        return this
+    }
+
+    disableTrails() {
+        this.trail = null
+        this.hasTrail = false
+        this.trailLifetime = null
+        this.trailMaxLength = null
+        this.smoothTrails = null
 
         return this
     }

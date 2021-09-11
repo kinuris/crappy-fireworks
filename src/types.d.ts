@@ -27,3 +27,8 @@ export interface Step {
 export interface Collisions {
     checkCollisions(boundingBox: Rectangle): void
 }
+
+export interface Trail {
+    enableTrails(trailLifetime: number, trailMaxLength: number, smoothTrail?: boolean): this
+    disableTrails(): this
+}
