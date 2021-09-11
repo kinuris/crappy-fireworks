@@ -53,7 +53,7 @@ document.addEventListener('visibilitychange', () => {
             fireworksArray.push(...Firework.genFireworkWithin(new Rectangle(new Point(0.01 * window.innerWidth + 150, 200), 0.9 * window.innerWidth - 300, window.innerHeight/3)))
         }, 800)
         twinklingStars = setInterval(() => {
-            fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
+            fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/2)))
         }, 2000)
     }
 })

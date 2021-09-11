@@ -34,7 +34,7 @@ export class Stars {
             let y = shootingStarSpawner.y + (Math.random() * shootingStarSpawner.dimensions.y)
             let velocityMultiplier = 1 + Math.random()
 
-            output.push(new Circle(3, new Point(x, y), new Point(0, 0), new Point(13 * velocityMultiplier, 5 * velocityMultiplier)).enableTrails(1, 10, true).setSteps(1).setLifetime(5))
+            output.push(new Circle(3, new Point(x, y), new Point(0, 0.1), new Point(13 * velocityMultiplier, 5 * velocityMultiplier)).enableTrails(1, 10, true).setSteps(1).setLifetime(5))
         }
 
         return output
