@@ -21,13 +21,13 @@ export class Stars {
         return output
     }
 
-    static genShootingStar(boundingBox: Rectangle) {
+    static genShootingStar(bounds: Rectangle) {
         let output: Circle[] = []
         
         // Select smaller Rectangle from Bounding Box
         let spawnerWidth = Math.random() * 50 + 100
         let spawnerHeight = Math.random() * 50 + 100
-        let shootingStarSpawner = new Rectangle(new Point(Math.random() * (boundingBox.dimensions.x - spawnerWidth), Math.random() * (boundingBox.dimensions.y - spawnerHeight)), spawnerWidth, spawnerHeight)
+        let shootingStarSpawner = new Rectangle(new Point(Math.random() * (bounds.dimensions.x - spawnerWidth), Math.random() * (bounds.dimensions.y - spawnerHeight)), spawnerWidth, spawnerHeight)
         
         for(let i = 0; i < Math.ceil(Math.random() * 3) + 1; i++) {
             let x = shootingStarSpawner.x + (Math.random() * shootingStarSpawner.dimensions.x)
@@ -38,5 +38,12 @@ export class Stars {
         }
 
         return output
+    }
+
+    static twinklingStars(bounds: Rectangle) {
+        let x = bounds.x + (Math.random() * bounds.dimensions.x)
+        let y = bounds.y + (Math.random() * bounds.dimensions.y)
+
+        return new Circle(3, new Point(x, y), new Point(0, 0), new Point(0, 0)).setLifetime(20)
     }
 }

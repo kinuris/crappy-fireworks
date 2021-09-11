@@ -24,7 +24,7 @@ const header = document.getElementById('header') as HTMLHeadElement
 let first = true
 
 let fireworksArray: Circle[] = []
-let shootingStarInterval: NodeJS.Timer, randomFireworkInterval: NodeJS.Timer
+let shootingStarInterval: NodeJS.Timer, randomFireworkInterval: NodeJS.Timer, twinklingStars: NodeJS.Timer
 window.addEventListener('load', e => {
     fireworksArray.push(...Stars.genStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.99 * window.innerWidth, window.innerHeight), 500))
     shootingStarInterval = setInterval(() => {
@@ -35,20 +35,26 @@ window.addEventListener('load', e => {
         fireworksArray.push(...Firework.genFireworkWithin(new Rectangle(new Point(0.01 * window.innerWidth, 200), 0.9 * window.innerWidth, window.innerHeight/3)))
     }, 755)
 
+    twinklingStars = setInterval(() => {
+        fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
+    }, 1000)
 })
 
 document.addEventListener('visibilitychange', () => {
     if(document.hidden){
         clearInterval(shootingStarInterval)
         clearInterval(randomFireworkInterval)
+        clearInterval(twinklingStars)
     } else {
         shootingStarInterval = setInterval(() => {
             fireworksArray.push(...Stars.genShootingStar(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
         }, 5000)
-    
         randomFireworkInterval = setInterval(() => {
             fireworksArray.push(...Firework.genFireworkWithin(new Rectangle(new Point(0.01 * window.innerWidth + 150, 200), 0.9 * window.innerWidth - 300, window.innerHeight/3)))
         }, 800)
+        twinklingStars = setInterval(() => {
+            fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
+        }, 2000)
     }
 })
 
