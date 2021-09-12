@@ -18,6 +18,22 @@ window.addEventListener('load', () => {
 window.addEventListener('resize', () => {
     ctx.canvas.width = window.innerWidth
     ctx.canvas.height = window.innerHeight
+
+    clearInterval(shootingStarInterval)
+    clearInterval(randomFireworkInterval)
+    clearInterval(twinklingStars)
+    
+    shootingStarInterval = setInterval(() => {
+        fireworksArray.push(...Stars.genShootingStar(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
+    }, 5000)
+
+    randomFireworkInterval = setInterval(() => {
+        fireworksArray.push(...Firework.genFireworkWithin(new Rectangle(new Point(0.01 * window.innerWidth, 200), 0.9 * window.innerWidth, window.innerHeight/3)))
+    }, 755)
+
+    twinklingStars = setInterval(() => {
+        fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
+    }, 1000)
 })
 
 const header = document.getElementById('header') as HTMLHeadElement

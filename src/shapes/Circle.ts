@@ -3,7 +3,6 @@ import { Drawable, Acceleration, Velocity, Updatable, Step, Collisions, Trail } 
 import { Color } from "../util/Color";
 import { Point } from "./Point";
 import { Rectangle } from "./Rectangle";
-
 export class Circle extends Point implements Acceleration, Velocity, Drawable, Updatable, Step, Collisions, Trail {
 
     private radius
