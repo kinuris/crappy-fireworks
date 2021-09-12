@@ -6,6 +6,7 @@ import { fade } from "./util/fade"
 import { Firework } from "./preset/genFirework"
 import { Color } from "./util/Color"
 import { Stars } from "./preset/genStars"
+import { genTwilightGradient } from "./preset/twilightGradient"
 
 const canvas = document.getElementById('cnv') as HTMLCanvasElement
 const ctx = canvas.getContext('2d')
@@ -76,14 +77,12 @@ let bounds = new Rectangle(new Point(0, 0), window.innerWidth, window.innerHeigh
 
 let startTime = Date.now()
 let msPerUpdate = 1000/40
+
+let twilightGradient = genTwilightGradient(ctx)
+
 function animate() {
     let elapsed = Date.now()
-
-    let twilightGradient = ctx.createLinearGradient(window.innerWidth/2, 0, window.innerWidth/2, window.innerHeight * 1.4)
-    twilightGradient.addColorStop(0, new Color(0, 0, 0, 1).toString())
-    twilightGradient.addColorStop(0.66, new Color(9, 15, 45, 1).toString())
-    twilightGradient.addColorStop(1, new Color(180, 50, 40, 1).toString())
-
+    
     ctx.fillStyle = twilightGradient
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
 

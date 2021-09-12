@@ -26,7 +26,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     private smoothTrails: boolean
     private trail: Circle[]
 
-    constructor(radius:number, position: Point, acceleration = new Point(0, 0), velocity = new Point(0, 0), bounce = 0, color = new Color(255, 255, 255, 1)) {
+    constructor(radius: number, position: Point, acceleration = new Point(0, 0), velocity = new Point(0, 0), bounce = 0, color = new Color(255, 255, 255, 1)) {
         super(position.x, position.y)
 
         this.radiusOriginal = this.radius = radius
