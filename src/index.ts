@@ -4,7 +4,6 @@ import { Point } from "./shapes/Point"
 import { Rectangle } from "./shapes/Rectangle"
 import { fade } from "./util/fade"
 import { Firework } from "./preset/genFirework"
-import { Color } from "./util/Color"
 import { Stars } from "./preset/genStars"
 import { genTwilightGradient } from "./preset/twilightGradient"
 
@@ -82,7 +81,7 @@ let twilightGradient = genTwilightGradient(ctx)
 
 function animate() {
     let elapsed = Date.now()
-    
+
     ctx.fillStyle = twilightGradient
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
 
