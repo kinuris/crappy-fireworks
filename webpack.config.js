@@ -13,7 +13,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.sass$/,
+                test: /\.sass/,
                 exclude: /node_modules/,
                 use: [
                     'style-loader',
@@ -22,7 +22,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.ts$/,
+                test: /\.ts/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'ts-loader'
