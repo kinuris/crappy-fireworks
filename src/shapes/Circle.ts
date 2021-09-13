@@ -10,6 +10,8 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     private color
     private acceleration
     private velocity
+
+    // On every applyCollisions, velocity.y is multiplied by 'bounce'
     private bounce
 
     // 'steps' determine the percentage decremented on the radius per applyCollisions(), given that 'collidedX' or 'collidedY' are true
@@ -19,7 +21,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     // 'tick' is incremented every update() unless radius < 0
     private tick = 0
 
-    // 'lifetime' depends on the value of 'tick', which controls the radius
+    // 'lifetime' depends on the value of 'tick' which, in turn, controls the radius
     private lifetime = 0
 
     // 'radiusThreshold' determines at what point the circle stops getting processed because the radius is too small
@@ -138,6 +140,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
                 this.trail[i].draw(context)
             }
 
+            // Trail logic is moved here when smoothTrails are enabled
             if(this.smoothTrails) {
                 if(this.trail.length > this.trailMaxLength)
                 this.trail.shift()
