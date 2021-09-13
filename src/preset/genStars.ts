@@ -30,19 +30,22 @@ export class Stars {
         let shootingStarSpawner = new Rectangle(new Point(Math.random() * (bounds.dimensions.x - spawnerWidth), Math.random() * (bounds.dimensions.y - spawnerHeight)), spawnerWidth, spawnerHeight)
         
         for(let i = 0; i < Math.ceil(Math.random() * 3) + 1; i++) {
-            let x = shootingStarSpawner.x + (Math.random() * shootingStarSpawner.dimensions.x)
-            let y = shootingStarSpawner.y + (Math.random() * shootingStarSpawner.dimensions.y)
+            let { x, y } = shootingStarSpawner.getRandomPointWithin()
             let velocityMultiplier = 1 + Math.random()
 
-            output.push(new Circle(3, new Point(x, y)).enableTrails(1, 10, true).setSteps(1).setLifetime(5).setAcceleration(new Point(0, 0.1)).setVelocity(new Point(13 * velocityMultiplier, 5 * velocityMultiplier)))
+            output.push(new Circle(3, new Point(x, y))
+            .enableTrails(1, 10, true)
+            .setSteps(1)
+            .setLifetime(5)
+            .setYAccel(0.1)
+            .setVelocity(new Point(13 * velocityMultiplier, 5 * velocityMultiplier)))
         }
 
         return output
     }
 
     static twinklingStars(bounds: Rectangle) {
-        let x = bounds.x + (Math.random() * bounds.dimensions.x)
-        let y = bounds.y + (Math.random() * bounds.dimensions.y)
+        let { x, y } = bounds.getRandomPointWithin()
 
         return new Circle(3, new Point(x, y)).setLifetime(20)
     }

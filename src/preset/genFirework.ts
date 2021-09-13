@@ -35,8 +35,7 @@ export class Firework {
     }
 
     static genFireworkWithin(bounds: Rectangle) {
-        let x = bounds.x + (Math.random() * bounds.dimensions.x)
-        let y = bounds.y + (Math.random() * bounds.dimensions.y)
+        let { x, y } = bounds.getRandomPointWithin()
 
         return this.genFireworkAt(new Point(x, y))
     }

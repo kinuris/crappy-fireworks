@@ -77,6 +77,7 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('close', () => {
     clearInterval(shootingStarInterval)
     clearInterval(randomFireworkInterval)
+    clearInterval(twinklingStars)
 })
 
 canvas.addEventListener('click', e => {
