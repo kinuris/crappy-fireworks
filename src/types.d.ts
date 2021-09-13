@@ -33,6 +33,8 @@ export interface Step {
 
 export interface Collisions {
     checkCollisions(boundingBox: Rectangle): void
+    getCollidedX(): boolean
+    getCollidedY(): boolean
 }
 
 export interface Trail {

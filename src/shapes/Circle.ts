@@ -167,6 +167,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     }
 
     // Separated from logic that updates velocity values to ensure clipping does not occur
+    // This method is not private to allow for collision checking separate of updates
     checkCollisions(boundingBox: Rectangle) {
         if(this.radius <= this.radiusThreshold)
             return
@@ -299,5 +300,13 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
 
     getRadiusThreshold() {
         return this.radiusThreshold
+    }
+
+    getCollidedX() {
+        return this.collidedX
+    }
+
+    getCollidedY() {
+        return this.collidedY
     }
 }
