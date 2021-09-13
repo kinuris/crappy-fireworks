@@ -31,6 +31,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     // 'radiusThreshold' determines at what point the circle stops getting processed because the radius is too small
     private radiusThreshold = 0
 
+    // allows for the separation of collision checking and application
     private separatedCollisionLogic = false
 
     // 'changedX' and 'changedY', along with 'collidedX' and 'collidedY' ensure that collisions are processed without clipping

@@ -57,8 +57,8 @@ function startIntervals() {
         fireworksArray.push(...Stars.genShootingStar(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
     }, 5000)
     randomFireworkInterval = setInterval(() => {
-        fireworksArray.push(...Firework.genFireworkWithin(new Rectangle(new Point(0.01 * window.innerWidth + 150, 200), 0.9 * window.innerWidth - 300, window.innerHeight/3)))
-    }, 800)
+        fireworksArray.push(...Firework.genFirework2Within(new Rectangle(new Point(0.01 * window.innerWidth + 150, 200), 0.9 * window.innerWidth - 300, window.innerHeight/3)))
+    }, 1000)
     twinklingStars = setInterval(() => {
         fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/2)))
     }, 2000)
@@ -75,7 +75,8 @@ canvas.addEventListener('click', e => {
         first = !first
     }
 
-    fireworksArray.push(...Firework.genFireworkAt(new Point(e.x, e.y)))
+    // fireworksArray.push(...Firework.genFireworkAt(new Point(e.x, e.y)))
+    fireworksArray.push(...Firework.genFirework2At(new Point(e.x, e.y)))
 })
 
 let bounds = new Rectangle(new Point(0, 0), window.innerWidth, window.innerHeight)
