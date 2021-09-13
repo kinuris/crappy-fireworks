@@ -44,6 +44,6 @@ export class Stars {
         let x = bounds.x + (Math.random() * bounds.dimensions.x)
         let y = bounds.y + (Math.random() * bounds.dimensions.y)
 
-        return new Circle(3, new Point(x, y), new Point(0, 0), new Point(0, 0)).setLifetime(20)
+        return new Circle(3, new Point(x, y)).setLifetime(20)
     }
 }
