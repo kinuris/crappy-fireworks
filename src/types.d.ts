@@ -1,17 +1,20 @@
+import { Point } from "./shapes/Point";
 import { Rectangle } from "./shapes/Rectangle";
 
 export interface Acceleration {
-    getXAccel(): number
+    setAcceleration(accel: Point): this
     setXAccel(xAccel: number): this
-    getYAccel(): number
     setYAccel(yAccel: number): this
+    getXAccel(): number
+    getYAccel(): number
 }
 
 export interface Velocity {
-    getXVel(): number
+    setVelocity(vel: Point): this
     setXVel(xVel: number): this
-    getYVel(): number
     setYVel(yVel: number): this
+    getXVel(): number
+    getYVel(): number
 }
 
 export interface Updatable {
