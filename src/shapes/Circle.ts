@@ -10,12 +10,16 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     private color
     private acceleration
     private velocity
-
-    // On every applyCollisions, velocity.y is multiplied by 'bounce'
+    
+    /**
+     * @private On every applyCollisions, velocity.y is multiplied by 'bounce'
+     */
     private bounce
 
-    // 'steps' determine the percentage decremented on the radius per applyCollisions(), given that 'collidedX' or 'collidedY' are true
-    // For example, steps = 3, result in three collisions before the radius is approximately 0, each collision decrementing the radius by 1/3 of the original radius
+    /**
+     * @private 'steps' determine the percentage decremented on the radius per applyCollisions(), given that 'collidedX' or 'collidedY' are true
+     * For example, steps = 3, result in three collisions before the radius is approximately 0, each collision decrementing the radius by 1/3 of the original radius
+     */
     private steps = 3
 
     // 'tick' is incremented every update() unless radius < 0
@@ -26,6 +30,8 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
 
     // 'radiusThreshold' determines at what point the circle stops getting processed because the radius is too small
     private radiusThreshold = 0
+
+    private separatedCollisionLogic = false
 
     // 'changedX' and 'changedY', along with 'collidedX' and 'collidedY' ensure that collisions are processed without clipping
     private changedY = false
@@ -40,6 +46,23 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     private smoothTrails: boolean
     private trail: Circle[]
 
+    /**
+     * @remarks extends Point class
+     * @param radius radius of the circle
+     * @param position instance of Point class, specifies x and y coordinate
+     * @param acceleration instance of Point class, specifies x acceleration and y acceleration
+     * @setters setXAccel, setYAccel, setAcceleration
+     * @default acceleration = new Point(0, 0)
+     * @param velocity instance of Point class, specifies x velocity and y velocity
+     * @setters setXVel, setYVel, setVelocity
+     * @default velocity = new Point(0, 0)
+     * @param bounce on every collision application, velocity.y is multiplied with bounce
+     * @setters setBounce
+     * @default bounce = 0
+     * @param color instance of Color class in @link src/util/Color.ts
+     * @setters setColor
+     * @default color = new Color(0, 0, 0)
+     */
     constructor(radius: number, position: Point, acceleration = new Point(0, 0), velocity = new Point(0, 0), bounce = 0, color = new Color(255, 255, 255, 1)) {
         super(position.x, position.y)
 
@@ -50,19 +73,31 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         this.bounce = bounce
     }
 
+    /**
+     * @param boundingBox - bounds where collisions are checked against.
+     * 
+     * @instructions
+     * - If boundingBox is not provided, no collision-checking will be done.
+     * - You may call the method checkCollisions separate of update, this provides a way to separate checking and actual logic that changes changes velocity.
+     * - If enableSeparateCollisionLogic was called then you must call checkCollisions and then applyCollisions manually
+     */
     update(boundingBox?: Rectangle) {
         if(this.radius <= this.radiusThreshold)
             return
 
+
         if(this.lifetime > 0) 
             this.applyLifetime() 
-        
-        if(boundingBox) 
-            this.checkCollisions(boundingBox)
-        
+            
         this.incrementTick()
         this.applyTrails()
-        this.applyCollisions()
+        
+        if(!this.separatedCollisionLogic) {
+            if(boundingBox) 
+                this.checkCollisions(boundingBox)
+            this.applyCollisions()
+        }
+
         this.applyVelocityAcceleration()
     }
 
@@ -91,7 +126,18 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         } 
     }
 
-    private applyCollisions() {
+    private applyVelocityAcceleration() {
+
+        // Applies Acceleration
+        this.velocity.x += this.acceleration.x
+        this.velocity.y += this.acceleration.y
+        
+        // Applies Velocity
+        this.x += this.velocity.x
+        this.y += this.velocity.y
+    }
+
+    applyCollisions() {
         if (this.collidedY) {
             if (this.collidedY && !this.changedY) {
                 this.velocity.y = -this.velocity.y * (this.bounce <= 0 ? 1 : this.bounce)
@@ -111,17 +157,6 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         } else {
             this.changedX = false
         }
-    }
-
-    private applyVelocityAcceleration() {
-
-        // Applies Acceleration
-        this.velocity.x += this.acceleration.x
-        this.velocity.y += this.acceleration.y
-        
-        // Applies Velocity
-        this.x += this.velocity.x
-        this.y += this.velocity.y
     }
 
     draw(context: CanvasRenderingContext2D) {
@@ -166,7 +201,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         return new Point(randomX, randomY)
     }
 
-    // Separated from logic that updates velocity values to ensure clipping does not occur
+    // Separate from logic that updates velocity values to ensure clipping does not occur
     // This method is not private to allow for collision checking separate of updates
     checkCollisions(boundingBox: Rectangle) {
         if(this.radius <= this.radiusThreshold)
@@ -200,6 +235,12 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         this.trailLifetime = trailLifetime
         this.trailMaxLength = trailMaxLength
         this.smoothTrails = smoothTrail
+
+        return this
+    }
+
+    enableSeparateCollisionLogic() {
+        this.separatedCollisionLogic = true
 
         return this
     }
@@ -308,5 +349,15 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
 
     getCollidedY() {
         return this.collidedY
+    }
+
+    setBounce(bounce: number) {
+        this.bounce = bounce
+
+        return this
+    }
+
+    getBounce() {
+        return this.bounce
     }
 }
