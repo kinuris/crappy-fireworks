@@ -21,13 +21,11 @@ export class Firework {
                 let randPoint = new Point(x, y)
                 let { x: xComponent, y: yComponent } = position.component(randPoint)
                 let distance = randPoint.distance(position)
-                
+    
                 let radius = Math.random() * 10 + 2
-                
-                let acceleration = new Point(0, 0)
                 let velocity = new Point(xComponent * (distance/250), yComponent * (distance/250))
 
-                output.push(new Circle(radius, position, acceleration, velocity, 0.7, color).setSteps(1).setLifetime(10).setRadiusThreshold(0.2))
+                output.push(new Circle(radius, position).setSteps(1).setLifetime(10).setRadiusThreshold(0.2).setVelocity(velocity).setColor(color))
             } 
         }
 
@@ -35,8 +33,6 @@ export class Firework {
     }
 
     static genFireworkWithin(bounds: Rectangle) {
-        let { x, y } = bounds.getRandomPointWithin()
-
-        return this.genFireworkAt(new Point(x, y))
+        return this.genFireworkAt(bounds.getRandomPointWithin())
     }
 }

@@ -135,6 +135,14 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         }
     }
 
+    getRandomPointWithin() {
+        let randomAngle = Math.random() * 2 * Math.PI
+        let randomX = (Math.cos(randomAngle) * this.radius * Math.random()) + this.x
+        let randomY = (Math.sin(randomAngle) * this.radius * Math.random()) + this.y
+
+        return new Point(randomX, randomY)
+    }
+
     checkCollisions(boundingBox: Rectangle) {
         if(this.radius <= this.radiusThreshold)
             return
@@ -200,6 +208,8 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
 
     setColor(color: Color) {
         this.color = color
+
+        return this
     }
 
     getSteps() {
