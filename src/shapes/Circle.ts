@@ -11,14 +11,27 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     private acceleration
     private velocity
     private bounce
+
+    // 'steps' determine the percentage decremented on the radius per applyCollisions(), given that 'collidedX' or 'collidedY' are true
+    // For example, steps = 3, result in three collisions before the radius is approximately 0, each collision decrementing the radius by 1/3 of the original radius
     private steps = 3
+
+    // 'tick' is incremented every update() unless radius < 0
     private tick = 0
+
+    // 'lifetime' depends on the value of 'tick', which controls the radius
     private lifetime = 0
+
+    // 'radiusThreshold' determines at what point the circle stops getting processed because the radius is too small
     private radiusThreshold = 0
+
+    // 'changedX' and 'changedY', along with 'collidedX' and 'collidedY' ensure that collisions are processed without clipping
     private changedY = false
     private changedX = false
     private collidedX: boolean
     private collidedY: boolean
+
+    // The rest of the settings determine the 'trail'
     private hasTrail = false
     private trailLifetime: number
     private trailMaxLength: number
@@ -39,18 +52,24 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         if(this.radius <= this.radiusThreshold)
             return
 
-        if(this.lifetime > 0) {
-            this.tick++
-            this.radius = this.radius * ((this.lifetime - this.tick)/this.lifetime)
-        }
+        if(this.lifetime > 0) 
+            this.applyLifetime() 
         
-        if(boundingBox) {
+        if(boundingBox) 
             this.checkCollisions(boundingBox)
-        }
-
+        
+        this.incrementTick()
         this.applyTrails()
         this.applyCollisions()
         this.applyVelocityAcceleration()
+    }
+
+    private incrementTick() {
+        this.tick++
+    }
+
+    private applyLifetime() {
+        this.radius = this.radius * ((this.lifetime - this.tick)/this.lifetime)
     }
 
     private applyTrails() {
@@ -74,8 +93,8 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         if (this.collidedY) {
             if (this.collidedY && !this.changedY) {
                 this.velocity.y = -this.velocity.y * (this.bounce <= 0 ? 1 : this.bounce)
-                this.applySteps()
                 this.changedY = true
+                this.applySteps()
             }
         } else {
             this.changedY = false
@@ -84,8 +103,8 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         if (this.collidedX) {
             if (this.collidedX && !this.changedX) {
                 this.velocity.x = -this.velocity.x
-                this.applySteps()
                 this.changedX = true
+                this.applySteps()
             }
         } else {
             this.changedX = false
@@ -93,11 +112,12 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     }
 
     private applyVelocityAcceleration() {
-        // Apply Acceleration
+
+        // Applies Acceleration
         this.velocity.x += this.acceleration.x
         this.velocity.y += this.acceleration.y
         
-        // Apply Velocity
+        // Applies Velocity
         this.x += this.velocity.x
         this.y += this.velocity.y
     }
@@ -143,6 +163,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         return new Point(randomX, randomY)
     }
 
+    // Separated from logic that updates velocity values to ensure clipping does not occur
     checkCollisions(boundingBox: Rectangle) {
         if(this.radius <= this.radiusThreshold)
             return
@@ -160,14 +181,15 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         }
     }
     
+    // Decreases Radius According to Steps
     applySteps() {
-        // Decreases Radius According to Steps
         if(this.steps < 1)
             return
 
         this.radius -= (this.radiusOriginal/this.steps)
     }
 
+    // Initialization and setup of trails
     enableTrails(trailLifetime: number, trailMaxLength: number, smoothTrail = false) {
         this.trail = []
         this.hasTrail = true
@@ -270,5 +292,9 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
 
     getRadius() {
         return this.radius
+    }
+
+    getRadiusThreshold() {
+        return this.radiusThreshold
     }
 }

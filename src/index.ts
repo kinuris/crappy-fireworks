@@ -90,10 +90,8 @@ canvas.addEventListener('click', e => {
 })
 
 let bounds = new Rectangle(new Point(0, 0), window.innerWidth, window.innerHeight)
-
 let startTime = Date.now()
 let msPerUpdate = 1000/40
-
 let twilightGradient = genTwilightGradient(ctx)
 
 function animate() {
@@ -102,20 +100,18 @@ function animate() {
     ctx.fillStyle = twilightGradient
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
 
+    // Updates as specified by msPerUpdate
     if(elapsed - startTime > msPerUpdate) {
         startTime = elapsed
-
-        // TODO: Put Logic Here
-
+        // Logic Here
         for(let i = 0; i < fireworksArray.length; i++) {
-            if(fireworksArray[i].getRadius() > 0) {
+            if(fireworksArray[i].getRadius() > fireworksArray[i].getRadiusThreshold()) {
                 fireworksArray[i].update(bounds)
             }
         }
     }
 
-    // TODO: Put Animation Here
-    
+    // Animation Here
     for(let i = 0; i < fireworksArray.length; i++) {
         if(fireworksArray[i].getRadius() > 0) {
             fireworksArray[i].draw(ctx)
