@@ -1,7 +1,9 @@
 import { Circle } from "../shapes/Circle";
 import { Point } from "../shapes/Point";
 import { Rectangle } from "../shapes/Rectangle";
+import { clamp } from "../util/clamp";
 import { Color } from "../util/Color";
+import { getSizeCoefficient, getWindowArea } from "../util/windowArea";
 
 export class Firework {
     static genFireworkAt(position: Point) {
@@ -39,7 +41,7 @@ export class Firework {
         
         for(let u = 1; u < Math.ceil(Math.random() * 5) + 5; u++) {
             const color = Color.genRandColor(new Color(255, 255, 255, 1))
-            const intensity = Math.random() * 1800
+            const intensity = Math.random() * clamp(1800 * getSizeCoefficient(getWindowArea()), 600, 2500)
             const lifetime = Math.random() * 8 + 8
             const segments = Math.round(Math.random() * 32) + 8
             const radius = (Math.random() * 10) + 3

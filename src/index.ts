@@ -6,6 +6,8 @@ import { fade } from "./util/fade"
 import { Firework } from "./preset/genFirework"
 import { Stars } from "./preset/genStars"
 import { genTwilightGradient } from "./preset/twilightGradient"
+import { getSizeCoefficient, getWindowArea } from "./util/windowArea"
+import { clamp } from "./util/clamp"
 
 const canvas = document.getElementById('cnv') as HTMLCanvasElement
 const ctx = canvas.getContext('2d')
@@ -18,7 +20,7 @@ let starsArray: Circle[] = []
 let shootingStarInterval: NodeJS.Timer, randomFireworkInterval: NodeJS.Timer, twinklingStars: NodeJS.Timer
 
 window.addEventListener('load', () => {
-    populateStars(500)
+    populateStars(clamp(500 * getSizeCoefficient(getWindowArea()), 100, 1000))
     startIntervals()
 })
 
@@ -30,7 +32,7 @@ window.addEventListener('resize', () => {
     applyWindowSize()
     clearIntervals()
     starsArray = []
-    populateStars(500)
+    populateStars(clamp(500 * getSizeCoefficient(getWindowArea()), 100, 1000))
     startIntervals()
 })
 

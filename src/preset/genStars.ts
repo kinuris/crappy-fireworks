@@ -1,6 +1,7 @@
 import { Circle } from "../shapes/Circle";
 import { Point } from "../shapes/Point";
 import { Rectangle } from "../shapes/Rectangle";
+import { getSizeCoefficient, getWindowArea } from "../util/windowArea";
 
 export class Stars {
     static genStars(boundingBox: Rectangle, count: number) {
@@ -28,9 +29,9 @@ export class Stars {
         let shootingStarSpawner = new Rectangle(new Point(Math.random() * (bounds.dimensions.x - spawnerWidth), Math.random() * (bounds.dimensions.y - spawnerHeight)), spawnerWidth, spawnerHeight)
         
         for(let i = 0; i < Math.ceil(Math.random() * 3) + 1; i++) {
-            let velocityMultiplier = 1 + Math.random()
+            let velocityMultiplier = 1 + Math.random() * getSizeCoefficient(getWindowArea())
 
-            output.push(new Circle(3, shootingStarSpawner.getRandomPointWithin())
+            output.push(new Circle(3 * getSizeCoefficient(getWindowArea()), shootingStarSpawner.getRandomPointWithin())
             .enableTrails(1, 10, true)
             .setSteps(1)
             .setLifetime(5)
