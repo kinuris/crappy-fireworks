@@ -102,20 +102,24 @@ function animate() {
     ctx.fillStyle = twilightGradient
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
 
-    if (elapsed - startTime > msPerUpdate) {
+    if(elapsed - startTime > msPerUpdate) {
         startTime = elapsed
 
         // TODO: Put Logic Here
 
         for(let i = 0; i < fireworksArray.length; i++) {
-            fireworksArray[i].update(bounds)
+            if(fireworksArray[i].getRadius() > 0) {
+                fireworksArray[i].update(bounds)
+            }
         }
     }
 
     // TODO: Put Animation Here
     
     for(let i = 0; i < fireworksArray.length; i++) {
-        fireworksArray[i].draw(ctx)
+        if(fireworksArray[i].getRadius() > 0) {
+            fireworksArray[i].draw(ctx)
+        }
     }
 
     requestAnimationFrame(animate)

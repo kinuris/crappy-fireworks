@@ -1,6 +1,5 @@
 import { Color } from "../util/Color"
 
-
 export function genTwilightGradient(ctx: CanvasRenderingContext2D) {
     let twilightGradient = ctx.createLinearGradient(window.innerWidth/2, 0, window.innerWidth/2, window.innerHeight * 1.4)
     

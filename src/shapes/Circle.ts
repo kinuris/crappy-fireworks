@@ -267,4 +267,8 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     getYVel() {
         return this.velocity.y
     }
+
+    getRadius() {
+        return this.radius
+    }
 }
