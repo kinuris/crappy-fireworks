@@ -78,8 +78,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
      * 
      * @instructions
      * - If boundingBox is not provided, no collision-checking will be done.
-     * - You may call the method checkCollisions separate of update, this provides a way to separate checking and actual logic that changes changes velocity.
-     * - If enableSeparateCollisionLogic was called then you must call checkCollisions and then applyCollisions manually
+     * - If enableSeparateCollisionLogic was called then you must call checkCollisions and applyCollisions manually
      */
     update(boundingBox?: Rectangle) {
         if(this.radius <= this.radiusThreshold)
@@ -94,8 +93,8 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         
         if(!this.separatedCollisionLogic) {
             if(boundingBox) 
-                this.checkCollisions(boundingBox)
-            this.applyCollisions()
+                this.checkCollisionsPrivate(boundingBox)
+            this.applyCollisionsPrivate()
         }
 
         this.applyVelocityAcceleration()
@@ -137,7 +136,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         this.y += this.velocity.y
     }
 
-    applyCollisions() {
+    private applyCollisionsPrivate() {
         if (this.collidedY) {
             if (this.collidedY && !this.changedY) {
                 this.velocity.y = -this.velocity.y * (this.bounce <= 0 ? 1 : this.bounce)
@@ -156,6 +155,41 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
             }
         } else {
             this.changedX = false
+        }
+    }
+
+    // Separate from logic that updates velocity values to ensure clipping does not occur
+    // This method is not private to allow for collision checking separate of updates
+    private checkCollisionsPrivate(boundingBox: Rectangle) {
+        if(this.radius <= this.radiusThreshold)
+            return
+
+        if (this.y + this.radius > boundingBox.dimensions.y) {
+            this.collidedY = true
+        } else {
+            this.collidedY = false
+        }
+
+        if (this.x + this.radius > boundingBox.dimensions.x || this.x - this.radius < boundingBox.x) {
+            this.collidedX = true
+        } else {
+            this.collidedX = false
+        }
+    }
+
+    checkCollisions(boundingBox: Rectangle) {
+        if(this.separatedCollisionLogic) {
+            this.checkCollisionsPrivate(boundingBox)
+        } else {
+            throw new Error('Only call checkCollisions manually if enableSeparateCollisionLogic was called first')
+        }
+    }
+
+    applyCollisions() {
+        if(this.separatedCollisionLogic) {
+            this.applyCollisionsPrivate()
+        } else {
+            throw new Error('Only call applyCollisions manually if enableSeparateCollisionLogic was called first')
         }
     }
 
@@ -199,25 +233,6 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         let randomY = (Math.sin(randomAngle) * this.radius * Math.random()) + this.y
 
         return new Point(randomX, randomY)
-    }
-
-    // Separate from logic that updates velocity values to ensure clipping does not occur
-    // This method is not private to allow for collision checking separate of updates
-    checkCollisions(boundingBox: Rectangle) {
-        if(this.radius <= this.radiusThreshold)
-            return
-
-        if (this.y + this.radius > boundingBox.dimensions.y) {
-            this.collidedY = true
-        } else {
-            this.collidedY = false
-        }
-
-        if (this.x + this.radius > boundingBox.dimensions.x || this.x - this.radius < boundingBox.x) {
-            this.collidedX = true
-        } else {
-            this.collidedX = false
-        }
     }
     
     // Decreases Radius According to Steps
