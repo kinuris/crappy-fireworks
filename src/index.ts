@@ -10,75 +10,64 @@ import { genTwilightGradient } from "./preset/twilightGradient"
 const canvas = document.getElementById('cnv') as HTMLCanvasElement
 const ctx = canvas.getContext('2d')
 
-window.addEventListener('load', () => {
-    ctx.canvas.width = window.innerWidth
-    ctx.canvas.height = window.innerHeight
-})
-
-window.addEventListener('resize', () => {
-    ctx.canvas.width = window.innerWidth
-    ctx.canvas.height = window.innerHeight
-
-    clearInterval(shootingStarInterval)
-    clearInterval(randomFireworkInterval)
-    clearInterval(twinklingStars)
-    
-    shootingStarInterval = setInterval(() => {
-        fireworksArray.push(...Stars.genShootingStar(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
-    }, 5000)
-
-    randomFireworkInterval = setInterval(() => {
-        fireworksArray.push(...Firework.genFireworkWithin(new Rectangle(new Point(0.01 * window.innerWidth, 200), 0.9 * window.innerWidth, window.innerHeight/3)))
-    }, 755)
-
-    twinklingStars = setInterval(() => {
-        fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
-    }, 1000)
-})
-
 const header = document.getElementById('header') as HTMLHeadElement
 let first = true
 
 let fireworksArray: Circle[] = []
+let starsArray: Circle[] = []
 let shootingStarInterval: NodeJS.Timer, randomFireworkInterval: NodeJS.Timer, twinklingStars: NodeJS.Timer
-window.addEventListener('load', e => {
-    fireworksArray.push(...Stars.genStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.99 * window.innerWidth, window.innerHeight), 500))
-    shootingStarInterval = setInterval(() => {
-        fireworksArray.push(...Stars.genShootingStar(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
-    }, 5000)
 
-    randomFireworkInterval = setInterval(() => {
-        fireworksArray.push(...Firework.genFireworkWithin(new Rectangle(new Point(0.01 * window.innerWidth, 200), 0.9 * window.innerWidth, window.innerHeight/3)))
-    }, 755)
-
-    twinklingStars = setInterval(() => {
-        fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
-    }, 1000)
+window.addEventListener('load', () => {
+    populateStars(500)
+    startIntervals()
 })
 
-document.addEventListener('visibilitychange', () => {
+window.addEventListener('load', () => {
+    applyWindowSize()
+})
+
+window.addEventListener('resize', () => {
+    applyWindowSize()
+    clearIntervals()
+    starsArray = []
+    populateStars(500)
+    startIntervals()
+})
+
+window.addEventListener('visibilitychange', () => {
     if(document.hidden){
-        clearInterval(shootingStarInterval)
-        clearInterval(randomFireworkInterval)
-        clearInterval(twinklingStars)
+        clearIntervals()
     } else {
-        shootingStarInterval = setInterval(() => {
-            fireworksArray.push(...Stars.genShootingStar(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
-        }, 5000)
-        randomFireworkInterval = setInterval(() => {
-            fireworksArray.push(...Firework.genFireworkWithin(new Rectangle(new Point(0.01 * window.innerWidth + 150, 200), 0.9 * window.innerWidth - 300, window.innerHeight/3)))
-        }, 800)
-        twinklingStars = setInterval(() => {
-            fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/2)))
-        }, 2000)
+        startIntervals()
     }
 })
 
 window.addEventListener('close', () => {
+    clearIntervals()
+})
+function applyWindowSize() {
+    ctx.canvas.width = window.innerWidth
+    ctx.canvas.height = window.innerHeight
+}
+function populateStars(count: number) {
+    starsArray.push(...Stars.genStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.99 * window.innerWidth, window.innerHeight), count))
+}
+function startIntervals() {
+    shootingStarInterval = setInterval(() => {
+        fireworksArray.push(...Stars.genShootingStar(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
+    }, 5000)
+    randomFireworkInterval = setInterval(() => {
+        fireworksArray.push(...Firework.genFireworkWithin(new Rectangle(new Point(0.01 * window.innerWidth + 150, 200), 0.9 * window.innerWidth - 300, window.innerHeight/3)))
+    }, 800)
+    twinklingStars = setInterval(() => {
+        fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/2)))
+    }, 2000)
+}
+function clearIntervals() {
     clearInterval(shootingStarInterval)
     clearInterval(randomFireworkInterval)
     clearInterval(twinklingStars)
-})
+}
 
 canvas.addEventListener('click', e => {
     if(first){
@@ -116,6 +105,10 @@ function animate() {
         if(fireworksArray[i].getRadius() > 0) {
             fireworksArray[i].draw(ctx)
         }
+    }
+
+    for(let i = 0; i < starsArray.length; i++) {
+        starsArray[i].draw(ctx)
     }
 
     requestAnimationFrame(animate)

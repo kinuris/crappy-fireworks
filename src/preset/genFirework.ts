@@ -18,9 +18,9 @@ export class Firework {
                 let randomAngle = Math.random() * Math.PI * 2
                 let x = Math.cos(randomAngle) * intensity + position.x
                 let y = Math.sin(randomAngle) * intensity + position.y
+                let randPoint = new Point(x, y)
                 
                 let radius = Math.random() * 10 + 2
-                let randPoint = new Point(x, y)
                 let distance = randPoint.distance(position)
 
                 let { x: xComponent, y: yComponent } = position.component(randPoint)
