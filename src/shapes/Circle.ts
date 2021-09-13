@@ -206,16 +206,32 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         return this.steps
     }
 
+    setXAccel(xAccel: number) {
+        this.acceleration.x = xAccel
+    }
+
     getXAccel() {
         return this.acceleration.x
+    }
+
+    setYAccel(yAccel: number) {
+        this.acceleration.y = yAccel
     }
 
     getYAccel() {
         return this.acceleration.y
     }
 
+    setXVel(xVel: number) {
+        this.velocity.x = xVel
+    }
+
     getXVel() {
         return this.velocity.x
+    }
+
+    setYVel(yVel: number) {
+        this.velocity.y = yVel
     }
 
     getYVel() {

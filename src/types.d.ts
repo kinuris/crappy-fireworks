@@ -2,12 +2,16 @@ import { Rectangle } from "./shapes/Rectangle";
 
 export interface Acceleration {
     getXAccel(): number
+    setXAccel(xAccel: number): void
     getYAccel(): number
+    setYAccel(yAccel: number): void
 }
 
 export interface Velocity {
     getXVel(): number
+    setXVel(xVel: number): void
     getYVel(): number
+    setYVel(yVel: number): void
 }
 
 export interface Updatable {
