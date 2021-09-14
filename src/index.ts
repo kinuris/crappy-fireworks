@@ -98,11 +98,11 @@ function animate() {
         // Logic Here
         for(let i = 0; i < fireworksArray.length; i++) {
             if(fireworksArray[i].getRadius() > fireworksArray[i].getRadiusThreshold()) {
-                fireworksArray[i].update(bounds)
+                fireworksArray[i].update()
             }
         }
     }
-
+    
     // Animation Here
     for(let i = 0; i < fireworksArray.length; i++) {
         if(fireworksArray[i].getRadius() > 0) {

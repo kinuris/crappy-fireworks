@@ -1,7 +1,7 @@
 import { Point } from "./Point";
 
 export class Rectangle extends Point {
-    public dimensions
+    private dimensions
 
     constructor(position: Point, length: number, height: number) {
         super(position.x, position.y)
@@ -12,6 +12,10 @@ export class Rectangle extends Point {
     setDimensions(length: number, height: number) {
         this.dimensions.x = length
         this.dimensions.y = height
+    }
+
+    getDimensions() {
+        return this.dimensions
     }
 
     getRandomPointWithin() {

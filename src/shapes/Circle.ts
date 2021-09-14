@@ -165,13 +165,14 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         if(this.radius <= this.radiusThreshold)
             return
 
-        if (this.y + this.radius > boundingBox.dimensions.y) {
+        let { x: xBound, y: yBound } = boundingBox.getDimensions()
+        if (this.y + this.radius > yBound) {
             this.collidedY = true
         } else {
             this.collidedY = false
         }
 
-        if (this.x + this.radius > boundingBox.dimensions.x || this.x - this.radius < boundingBox.x) {
+        if (this.x + this.radius > xBound || this.x - this.radius < boundingBox.x) {
             this.collidedX = true
         } else {
             this.collidedX = false

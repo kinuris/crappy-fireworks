@@ -26,7 +26,8 @@ export class Stars {
         // Select smaller Rectangle from Bounding Box
         let spawnerWidth = Math.random() * 50 + 100
         let spawnerHeight = Math.random() * 50 + 100
-        let shootingStarSpawner = new Rectangle(new Point(Math.random() * (bounds.dimensions.x - spawnerWidth), Math.random() * (bounds.dimensions.y - spawnerHeight)), spawnerWidth, spawnerHeight)
+        let { x: xBound, y: yBound } = bounds.getDimensions()
+        let shootingStarSpawner = new Rectangle(new Point(Math.random() * (xBound - spawnerWidth), Math.random() * (yBound - spawnerHeight)), spawnerWidth, spawnerHeight)
         
         for(let i = 0; i < Math.ceil(Math.random() * 3) + 1; i++) {
             let velocityMultiplier = 1 + Math.random() * getSizeCoefficient(getWindowArea())
