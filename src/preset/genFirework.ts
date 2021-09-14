@@ -46,7 +46,7 @@ export class Firework {
             const segments = Math.round(Math.random() * 32) + 8
             const radius = (Math.random() * 10) + 3
 
-            for(let i = 1; i <= segments; i++) {
+            for(let i = 0; i < segments; i++) {
                 let fraction = 1/segments * i * Math.PI * 2
                 let x = Math.cos(fraction) * intensity + position.x
                 let y = Math.sin(fraction) * intensity + position.y

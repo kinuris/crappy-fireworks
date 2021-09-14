@@ -18,6 +18,7 @@ let first = true
 let fireworksArray: Circle[] = []
 let starsArray: Circle[] = []
 let shootingStarInterval: NodeJS.Timer, randomFireworkInterval: NodeJS.Timer, twinklingStars: NodeJS.Timer
+let bounds = new Rectangle(new Point(0, 0), window.innerWidth, window.innerHeight)
 
 window.addEventListener('load', () => {
     populateStars(clamp(500 * getSizeCoefficient(getWindowArea()), 100, 1000))
@@ -81,7 +82,6 @@ canvas.addEventListener('click', e => {
     fireworksArray.push(...Firework.genFirework2At(new Point(e.x, e.y)))
 })
 
-let bounds = new Rectangle(new Point(0, 0), window.innerWidth, window.innerHeight)
 let startTime = Date.now()
 let msPerUpdate = 1000/40
 let twilightGradient = genTwilightGradient(ctx)
