@@ -85,7 +85,6 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         if(this.radius <= this.radiusThreshold)
             return
 
-
         if(this.lifetime > 0) 
             this.applyLifetime() 
             
@@ -207,7 +206,6 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
 
         if(this.hasTrail) {
             for(let i = 0; i < this.trail.length; i++) {
-                console.log("drew ")
                 this.trail[i].draw(context)
             }
 

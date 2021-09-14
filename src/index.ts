@@ -8,6 +8,8 @@ import { Stars } from "./preset/genStars"
 import { genTwilightGradient } from "./preset/twilightGradient"
 import { getSizeCoefficient, getWindowArea } from "./util/windowArea"
 import { clamp } from "./util/clamp"
+import { Polygon } from "./shapes/Polygon"
+import { Color } from "./util/Color"
 
 const canvas = document.getElementById('cnv') as HTMLCanvasElement
 const ctx = canvas.getContext('2d')
@@ -17,6 +19,7 @@ let first = true
 
 let fireworksArray: Circle[] = []
 let starsArray: Circle[] = []
+let polygonArray: Polygon[] = []
 let shootingStarInterval: NodeJS.Timer, randomFireworkInterval: NodeJS.Timer, twinklingStars: NodeJS.Timer
 let bounds = new Rectangle(new Point(0, 0), window.innerWidth, window.innerHeight)
 
@@ -78,8 +81,17 @@ canvas.addEventListener('click', e => {
         first = !first
     }
 
+    let relativeVertices = [new Point(-100, 0), new Point(-50, -100)]
+
     // fireworksArray.push(...Firework.genFireworkAt(new Point(e.x, e.y)))
-    fireworksArray.push(...Firework.genFirework2At(new Point(e.x, e.y)))
+    // fireworksArray.push(...Firework.genFirework2At(new Point(e.x, e.y)))
+    polygonArray.push(new Polygon(new Point(e.x, e.y))
+    .setVerticesRelative(relativeVertices)
+    .setColor(Color.genRandColor(new Color(255, 255, 255, 1)))
+    .setVelocity(new Point(0, 0))
+    .setAcceleration(new Point(0, 0))
+    .setLifetime(500)
+    .setVirtualCenter(new Point(50, 0)))
 })
 
 let startTime = Date.now()
@@ -101,6 +113,10 @@ function animate() {
                 fireworksArray[i].update()
             }
         }
+
+        for(let i = 0; i < polygonArray.length; i++) {
+            polygonArray[i].update()
+        }
     }
     
     // Animation Here
@@ -112,6 +128,10 @@ function animate() {
 
     for(let i = 0; i < starsArray.length; i++) {
         starsArray[i].draw(ctx)
+    }
+
+    for(let i = 0; i < polygonArray.length; i++) {
+        polygonArray[i].draw(ctx)
     }
 
     requestAnimationFrame(animate)

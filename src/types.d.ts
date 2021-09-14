@@ -33,6 +33,7 @@ export interface Step {
 
 export interface Collisions {
     checkCollisions(boundingBox: Rectangle): void
+    applyCollisions(): void
     getCollidedX(): boolean
     getCollidedY(): boolean
 }
