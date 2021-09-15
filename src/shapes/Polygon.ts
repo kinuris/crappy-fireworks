@@ -73,11 +73,10 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
             return
 
         for(let i = 0; i < this.animations.length; i++) {
-            if(!this.animations[i].isDone()) {
-                this.animations[i].update()
-
+            if(!this.animations[i].update())
                 break
-            }
+            
+            this.animations.splice(i, 1)
         }
     }
 
@@ -89,11 +88,8 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
             return
 
         for(let i = 0; i < this.animations.length; i++) {
-            if(!this.animations[i].isDone()) {
-                this.animations[i].animate(this.vertices)
-
+            if(!this.animations[i].animate(this.vertices))
                 break
-            }
 
             this.animations.splice(i, 1)
         }           

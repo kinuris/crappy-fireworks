@@ -16,8 +16,9 @@ export class Animation {
 
     update() {
         this.tick++
-
         this.applyAnimationRatio()
+
+        return this.isDone()
     }
 
     animate(vertices: Point[]) {
@@ -26,6 +27,8 @@ export class Animation {
         for(let i = 0; i < vertices.length; i++) {
             vertices[i].transform(transformMatrix)
         }
+
+        return this.isDone()
     }
 
     isDone() {
