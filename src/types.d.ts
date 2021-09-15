@@ -44,4 +44,4 @@ export interface Trail {
     disableTrails(): this
 }
 
-export type animationLogic = (animationRatio: number) => Matrix2D
+export type animationLogic = (animationRatio: number, tick?: number) => Matrix2D

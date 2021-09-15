@@ -22,7 +22,7 @@ export class Animation {
     }
 
     animate(vertices: Point[]) {
-        let transformMatrix = this.logic(this.animationRatio)
+        let transformMatrix = this.logic(this.animationRatio, this.tick)
 
         for(let i = 0; i < vertices.length; i++) {
             vertices[i].transform(transformMatrix)

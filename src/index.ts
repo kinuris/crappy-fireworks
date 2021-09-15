@@ -98,8 +98,7 @@ canvas.addEventListener('click', e => {
     }, 30)
     .animate(animationRatio => {
         return Matrix2D.genIdentity().rotate(Math.PI * animationRatio).scale(0.5 - animationRatio/2)
-    }, 10)
-    )
+    }, 10))
 })
 
 let startTime = Date.now()
