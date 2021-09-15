@@ -1,12 +1,14 @@
 import { Matrix2D } from "../util/Matrix"
 
 export class Point {
+    public xOriginal
+    public yOriginal
     public x
     public y
 
     constructor(x: number, y: number) {
-        this.x = x
-        this.y = y
+        this.xOriginal = this.x = x
+        this.yOriginal = this.y = y
     }
 
     flip() {
@@ -42,7 +44,7 @@ export class Point {
     }
 
     transform(matrix: Matrix2D) {
-        let { x, y } = matrix.multiply(this)
+        let { x, y } = matrix.multiply(new Point(this.xOriginal, this.yOriginal))
         this.x = x
         this.y = y
 
