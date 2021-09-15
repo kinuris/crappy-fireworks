@@ -10,6 +10,7 @@ import { getSizeCoefficient, getWindowArea } from "./util/windowArea"
 import { clamp } from "./util/clamp"
 import { Polygon } from "./shapes/Polygon"
 import { Color } from "./util/Color"
+import { Matrix2D } from "./util/Matrix"
 
 const canvas = document.getElementById('cnv') as HTMLCanvasElement
 const ctx = canvas.getContext('2d')
@@ -90,8 +91,15 @@ canvas.addEventListener('click', e => {
     .setColor(Color.genRandColor(new Color(255, 255, 255, 1)))
     .setVelocity(new Point(0, 0))
     .setAcceleration(new Point(0, 0))
-    .setLifetime(500)
-    .setVirtualCenter(new Point(50, 0)))
+    .setLifetime(0)
+    .setVirtualCenter(new Point(50, 50))
+    .animate(animationRatio => {
+        return Matrix2D.genIdentity().rotate(Math.PI * 2 * animationRatio).scale(clamp(1 - animationRatio, 0.5, 1))
+    }, 30)
+    .animate(animationRatio => {
+        return Matrix2D.genIdentity().rotate(Math.PI * animationRatio).scale(0.5 - animationRatio/2)
+    }, 10)
+    )
 })
 
 let startTime = Date.now()
@@ -107,6 +115,7 @@ function animate() {
     // Updates as specified by msPerUpdate
     if(elapsed - startTime > msPerUpdate) {
         startTime = elapsed
+        
         // Logic Here
         for(let i = 0; i < fireworksArray.length; i++) {
             if(fireworksArray[i].getRadius() > fireworksArray[i].getRadiusThreshold()) {

@@ -1,5 +1,6 @@
 import { Point } from "./shapes/Point";
 import { Rectangle } from "./shapes/Rectangle";
+import { Matrix2D } from "./util/Matrix";
 
 export interface Acceleration {
     setAcceleration(accel: Point): this
@@ -42,3 +43,5 @@ export interface Trail {
     enableTrails(trailLifetime: number, trailMaxLength: number, smoothTrail?: boolean): this
     disableTrails(): this
 }
+
+export type animationLogic = (animationRatio: number) => Matrix2D

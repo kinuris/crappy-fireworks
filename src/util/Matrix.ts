@@ -17,7 +17,7 @@ export class Matrix2D {
     multiply(point: Point) {
         let resultingX = this.iHat.multiply(point.x)
         let resultingY = this.jHat.multiply(point.y)
-
+    
         return resultingX.add(resultingY)
     }
 

@@ -1,12 +1,13 @@
-import { Acceleration, Drawable, Step, Updatable, Velocity } from "../types";
+import { Acceleration, animationLogic, Drawable, Step, Updatable, Velocity } from "../types";
+import { Animation } from "../util/Animation";
 import { Color } from "../util/Color";
-import { Matrix2D } from "../util/Matrix";
 import { Point } from "./Point";
 import { Rectangle } from "./Rectangle";
 
 export class Polygon extends Point implements Acceleration, Velocity, Updatable, Drawable, Step {
 
     private vertices: Point[]
+    private animations: Animation[] = []
     private color = new Color(255, 255, 255, 1)
     private acceleration = new Point(0, 0)
     private velocity = new Point(0, 0)
@@ -30,6 +31,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
 
         if(!this.virtualCenter) {
             context.moveTo(this.x, this.y)
+            this.applyAnimations() 
     
             if(this.absolute) {
                 for(let i = 0; i < this.vertices.length; i++) {
@@ -41,6 +43,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
                 }
             }
         } else {
+            this.applyAnimations()
             context.moveTo(this.vertices[0].x + this.virtualCenter.x, this.vertices[0].y + this.virtualCenter.y)
             for(let i = 1; i < this.vertices.length; i++) {
                 context.lineTo(this.vertices[i].x + this.virtualCenter.x, this.vertices[i].y + this.virtualCenter.y)
@@ -55,19 +58,45 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         if(this.lifetimeRatio < 0)
             return
 
-        let transformMatrix = Matrix2D.genIdentity().scale(this.lifetimeRatio)
-
-        this.vertices.forEach(vertex => {
-            vertex.transform(transformMatrix)
-        })
-
         this.incrementTick()
         this.applyVelocityAcceleration()
         this.applyLifetime()
+        this.updateAnimations()
 
         if(boundingBox) {
             // TODO: Handle Collisions
         }
+    }
+
+    private updateAnimations() {
+        if(!this.animations)
+            return
+
+        for(let i = 0; i < this.animations.length; i++) {
+            if(!this.animations[i].isDone()) {
+                this.animations[i].update()
+
+                break
+            }
+        }
+    }
+
+    /**
+     * @remarks Updates vertices to reflect animation
+     */
+    private applyAnimations() {
+        if(!this.animations)
+            return
+
+        for(let i = 0; i < this.animations.length; i++) {
+            if(!this.animations[i].isDone()) {
+                this.animations[i].animate(this.vertices)
+
+                break
+            }
+
+            this.animations.splice(i, 1)
+        }           
     }
 
     private applyLifetime() {
@@ -93,6 +122,12 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
 
     private incrementTick() {
         this.tick++
+    }
+
+    animate(transformation: animationLogic, duration: number) {
+        this.animations.push(new Animation(transformation, duration))
+      
+        return this
     }
 
     setVirtualCenter(center: Point) {
