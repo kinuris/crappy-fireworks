@@ -128,9 +128,8 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     private applyVelocityAcceleration() {
 
         // Applies Acceleration
-        this.velocity.x += this.acceleration.x
-        this.velocity.y += this.acceleration.y
-        
+        this.velocity = this.velocity.add(this.acceleration)
+
         // Applies Velocity
         this.x += this.velocity.x
         this.y += this.velocity.y
@@ -212,7 +211,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
             // Trail logic is moved here when smoothTrails are enabled
             if(this.smoothTrails) {
                 if(this.trail.length > this.trailMaxLength)
-                this.trail.shift()
+                    this.trail.shift()
 
                 let circle = new Circle(this.radius, new Point(this.x, this.y))
                 circle.setLifetime(this.trailLifetime)
