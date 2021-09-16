@@ -89,16 +89,16 @@ canvas.addEventListener('click', e => {
     polygonArray.push(new Polygon(new Point(e.x, e.y))
     .setVerticesRelative(relativeVertices)
     .setColor(Color.genRandColor(new Color(255, 255, 255, 1)))
-    .setVelocity(new Point(0, 0))
-    .setAcceleration(new Point(0, 0))
+    .setVelocity(new Point(5, -6))
+    .setAcceleration(new Point(0, 0.2   ))
+    .animate((_, tick) => {
+        return Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.05)
+    }, 60)
+    .animate(ratio => Matrix2D.genIdentity().scale(0.05 * (ratio - 1)), 40)
     .setLifetime(0)
     .setVirtualCenter(new Point(50, 50))
-    .animate(animationRatio => {
-        return Matrix2D.genIdentity().rotate(Math.PI * 2 * animationRatio).scale(clamp(1 - animationRatio, 0.5, 1))
-    }, 30)
-    .animate(animationRatio => {
-        return Matrix2D.genIdentity().rotate(Math.PI * animationRatio).scale(0.5 - animationRatio/2)
-    }, 10))
+    .enableTrails(10, 10)
+    )
 })
 
 let startTime = Date.now()
@@ -110,22 +110,6 @@ function animate() {
 
     ctx.fillStyle = twilightGradient
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
-
-    // Updates as specified by msPerUpdate
-    if(elapsed - startTime > msPerUpdate) {
-        startTime = elapsed
-        
-        // Logic Here
-        for(let i = 0; i < fireworksArray.length; i++) {
-            if(fireworksArray[i].getRadius() > fireworksArray[i].getRadiusThreshold()) {
-                fireworksArray[i].update()
-            }
-        }
-
-        for(let i = 0; i < polygonArray.length; i++) {
-            polygonArray[i].update()
-        }
-    }
     
     // Animation Here
     for(let i = 0; i < fireworksArray.length; i++) {
@@ -140,6 +124,23 @@ function animate() {
 
     for(let i = 0; i < polygonArray.length; i++) {
         polygonArray[i].draw(ctx)
+    }
+
+    
+    // Updates as specified by msPerUpdate
+    if(elapsed - startTime > msPerUpdate) {
+        startTime = elapsed
+        
+        // Logic Here
+        for(let i = 0; i < fireworksArray.length; i++) {
+            if(fireworksArray[i].getRadius() > fireworksArray[i].getRadiusThreshold()) {
+                fireworksArray[i].update()
+            }
+        }
+
+        for(let i = 0; i < polygonArray.length; i++) {
+            polygonArray[i].update()
+        }
     }
 
     requestAnimationFrame(animate)
