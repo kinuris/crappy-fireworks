@@ -92,9 +92,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         .setLifetime(this.trailLifetime)
         .setVirtualCenter(new Point(0, 0))
         .popVertices()
-        .animate(animationRatio => {
-            return Matrix2D.genIdentity().scale(1 - animationRatio)
-        }, this.trailLifetime)
+        .animate(animationRatio => Matrix2D.genIdentity().scale(1 - animationRatio), this.trailLifetime)
 
         this.trail.push(poly)
 
@@ -164,10 +162,17 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
 
     setVirtualCenter(center: Point) {
         this.virtualCenter = this
- 
-        this.vertices = this.vertices.map(vertex => {
-            return center.componentDifference(vertex.multiply(-1))
-        })
+        
+        let output: Point[] = []
+        for(let i = 0; i < this.vertices.length; i++) {
+            output.push(center.componentDifference(this.vertices[i].multiply(-1)))
+        }
+
+        this.vertices = output
+
+        // this.vertices = this.vertices.map(vertex => {
+        //     return center.componentDifference(vertex.multiply(-1))
+        // })
 
         this.vertices.push(center)
 
