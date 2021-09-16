@@ -92,8 +92,8 @@ export class Firework {
             } 
         }
 
-        const shardCount = Math.ceil(Math.random() * 8) + 4
-        const intensity = Math.random() * clamp(1000 * getSizeCoefficient(getWindowArea()), 600, 2500) + 500
+        const shardCount = Math.ceil(Math.random() * 6) + 4
+        const intensity = Math.random() * clamp(800 * getSizeCoefficient(getWindowArea()), 600, 2500) + 500
 
         for(let i = 0; i < shardCount; i++) {
             const color = Color.genRandColor(new Color(255, 255, 255, 1))
@@ -115,11 +115,11 @@ export class Firework {
             .setVelocity(velocity)
             .setLifetime(80)
             .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * ratio), 30)
-            .animate((_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1), 30)
+            .animate((_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick/2)).scale(0.1), 30)
             .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * (1 - ratio)), 20)
             .setLifetime(0)
             .setVirtualCenter(new Point(50, 50))
-            .enableTrails(7, 5))
+            .enableTrails(7, 4))
         }
 
         return { firework, shards }

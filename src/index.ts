@@ -62,10 +62,10 @@ function populateStars(count: number) {
 function startIntervals() {
     shootingStarInterval = setInterval(() => {
         fireworksArray.push(...Stars.genShootingStar(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/4)))
-    }, 5000)
+    }, 10000)
     randomFireworkInterval = setInterval(() => {
         fireworksArray.push(...Firework.genFirework2Within(new Rectangle(new Point(0.01 * window.innerWidth + 150, 200), 0.9 * window.innerWidth - 300, window.innerHeight/3)))
-    }, 3000)
+    }, 5000)
     twinklingStars = setInterval(() => {
         fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/2)))
     }, 2000)
