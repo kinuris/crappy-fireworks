@@ -1,8 +1,10 @@
 import { Circle } from "../shapes/Circle";
 import { Point } from "../shapes/Point";
+import { Polygon } from "../shapes/Polygon";
 import { Rectangle } from "../shapes/Rectangle";
 import { clamp } from "../util/clamp";
 import { Color } from "../util/Color";
+import { Matrix2D } from "../util/Matrix";
 import { getSizeCoefficient, getWindowArea } from "../util/windowArea";
 
 export class Firework {
@@ -62,6 +64,65 @@ export class Firework {
         }
 
         return output
+    }
+
+    static genFirework3At(position: Point) {
+        let firework: Circle[] = []
+        let shards: Polygon[] = []
+
+        for(let u = 1; u < Math.ceil(Math.random() * 5) + 5; u++) {
+            const color = Color.genRandColor(new Color(255, 255, 255, 1))
+            const intensity = Math.random() * clamp(1800 * getSizeCoefficient(getWindowArea()), 600, 2500)
+            const lifetime = Math.random() * 8 + 8
+            const segments = Math.round(Math.random() * 32) + 8
+            const radius = (Math.random() * 10) + 3
+
+            for(let i = 0; i < segments; i++) {
+                let fraction = 1/segments * i * Math.PI * 2
+                let x = Math.cos(fraction) * intensity + position.x
+                let y = Math.sin(fraction) * intensity + position.y
+                let point = new Point(x, y)
+
+                let distance = point.distance(position)
+                let { x: xComponent, y: yComponent } = position.component(point)
+
+                let velocity = new Point(xComponent * (distance/250), yComponent * (distance/250))
+
+                firework.push(new Circle(radius, position).setSteps(1).setLifetime(lifetime).setRadiusThreshold(0.2).setVelocity(velocity).setColor(color))
+            } 
+        }
+
+        const shardCount = Math.ceil(Math.random() * 8) + 4
+        const intensity = Math.random() * clamp(1000 * getSizeCoefficient(getWindowArea()), 600, 2500) + 500
+
+        for(let i = 0; i < shardCount; i++) {
+            const color = Color.genRandColor(new Color(255, 255, 255, 1))
+            const fraction = 1/shardCount * i * Math.PI * 2
+
+            const x = Math.cos(fraction) * intensity + position.x
+            const y = Math.sin(fraction) * intensity + position.y
+            const point = new Point(x, y)
+
+            const distance = point.distance(position)
+            const { x: xComponent, y: yComponent } = position.component(point)
+
+            const velocity = new Point(xComponent * (distance/150), yComponent * (distance/150))
+            const relativeVertices = [new Point(-100, 0), new Point(-50, -100)]
+
+            shards.push(new Polygon(new Point(position.x, position.y))
+            .setVerticesRelative(relativeVertices)
+            .setColor(color)
+            .setVelocity(velocity)
+            .setLifetime(80)
+            .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * ratio), 30)
+            .animate((_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1), 30)
+            .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * (1 - ratio)), 20)
+            .setLifetime(0)
+            .setVirtualCenter(new Point(50, 50))
+            .enableTrails(7, 5))
+        }
+
+        return { firework, shards }
     }
 
     static genFireworkWithin(bounds: Rectangle) {

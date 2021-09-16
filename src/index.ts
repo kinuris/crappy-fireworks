@@ -65,7 +65,7 @@ function startIntervals() {
     }, 5000)
     randomFireworkInterval = setInterval(() => {
         fireworksArray.push(...Firework.genFirework2Within(new Rectangle(new Point(0.01 * window.innerWidth + 150, 200), 0.9 * window.innerWidth - 300, window.innerHeight/3)))
-    }, 1000)
+    }, 3000)
     twinklingStars = setInterval(() => {
         fireworksArray.push(Stars.twinklingStars(new Rectangle(new Point(0.01 * window.innerWidth, 20), 0.9 * window.innerWidth, window.innerHeight/2)))
     }, 2000)
@@ -82,23 +82,26 @@ canvas.addEventListener('click', e => {
         first = !first
     }
 
-    let relativeVertices = [new Point(-100, 0), new Point(-50, -100)]
-
+    // let relativeVertices = [new Point(-100, 0), new Point(-50, -100)]
     // fireworksArray.push(...Firework.genFireworkAt(new Point(e.x, e.y)))
     // fireworksArray.push(...Firework.genFirework2At(new Point(e.x, e.y)))
-    polygonArray.push(new Polygon(new Point(e.x, e.y))
-    .setVerticesRelative(relativeVertices)
-    .setColor(Color.genRandColor(new Color(255, 255, 255, 1)))
-    .setVelocity(new Point(5, -6))
-    .setAcceleration(new Point(0, 0.2   ))
-    .animate((_, tick) => {
-        return Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.05)
-    }, 60)
-    .animate(ratio => Matrix2D.genIdentity().scale(0.05 * (ratio - 1)), 40)
-    .setLifetime(0)
-    .setVirtualCenter(new Point(50, 50))
-    .enableTrails(10, 10)
-    )
+    // polygonArray.push(new Polygon(new Point(e.x, e.y))
+    // .setVerticesRelative(relativeVertices)
+    // .setColor(Color.genRandColor(new Color(255, 255, 255, 1)))
+    // .setVelocity(new Point(5, -6))
+    // .setAcceleration(new Point(0, 0.2   ))
+    // .animate((_, tick) => {
+    //     return Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.05)
+    // }, 60)
+    // .animate(ratio => Matrix2D.genIdentity().scale(0.05 * (ratio - 1)), 40)
+    // .setLifetime(0)
+    // .setVirtualCenter(new Point(50, 50))
+    // .enableTrails(10, 10)
+    // )
+
+    let { firework, shards } = Firework.genFirework3At(new Point(e.x, e.y))
+    fireworksArray.push(...firework)
+    polygonArray.push(...shards)
 })
 
 let startTime = Date.now()
@@ -123,7 +126,11 @@ function animate() {
     }
 
     for(let i = 0; i < polygonArray.length; i++) {
-        polygonArray[i].draw(ctx)
+        if(polygonArray[i].getLifetimeRatio()) {
+            polygonArray[i].draw(ctx)
+        } else {
+            polygonArray.splice(i, 1)
+        }
     }
 
     
