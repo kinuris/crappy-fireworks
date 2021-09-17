@@ -12,7 +12,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     private color = new Color(255, 255, 255, 1)
     private acceleration = new Point(0, 0)
     private velocity = new Point(0, 0)
-    private virtualCenter: Point
+    private hasVirtualCenter: boolean
     private tick = 0
     private lifetime = 0
     private lifetimeRatio = 1
@@ -29,25 +29,22 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     }
 
     draw(context: CanvasRenderingContext2D) {
-        if(this.lifetimeRatio < 0)
-            return
+        if(!this.getLifetimeRatio()) return
 
             context.beginPath()
             context.fillStyle = this.color.toString()
-        
-        if(!this.virtualCenter) {
-            context.moveTo(this.x, this.y)
             this.applyAnimations()
+        
+        if(!this.hasVirtualCenter) {
+            context.moveTo(this.x, this.y)
 
             for(let i = 0; i < this.vertices.length; i++) {
                 context.lineTo(this.vertices[i].x + (this.absolute ? 0 : this.x), this.vertices[i].y + (this.absolute ? 0 : this.y))
             }
         } else {
-            // Emitter Animation
-            this.applyAnimations()
-            context.moveTo(this.vertices[0].x + this.virtualCenter.x, this.vertices[0].y + this.virtualCenter.y)
+            context.moveTo(this.vertices[0].x + this.x, this.vertices[0].y + this.y)
             for(let i = 1; i < this.vertices.length; i++) {
-                context.lineTo(this.vertices[i].x + this.virtualCenter.x, this.vertices[i].y + this.virtualCenter.y)
+                context.lineTo(this.vertices[i].x + this.x, this.vertices[i].y + this.y)
             }
         }
 
@@ -65,13 +62,12 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     }
 
     update(boundingBox?: Rectangle) {
-        if(this.lifetimeRatio < 0)
-            return
+        this.incrementTick()
+        if(!this.getLifetimeRatio()) return
 
         if(!this.smoothTrails && this.trail)
             this.applyTrails()
 
-        this.incrementTick()
         this.applyVelocityAcceleration()
         this.applyLifetime()
         this.updateAnimations()
@@ -85,12 +81,12 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         if(this.trail.length > this.trailMaxLength)
             this.trail.shift()
 
-        let poly = new Polygon(this.virtualCenter)
+        let poly = new Polygon(this)
+        .setLifetime(this.trailLifetime)
         .setVerticesRelative(this.vertices)
         .setVirtualCenter(new Point(0, 0))
         .popVertices()
         .setColor(this.color)
-        .setLifetime(this.trailLifetime)
         .animate(animationRatio => Matrix2D.genIdentity().scale(1 - animationRatio), this.trailLifetime)
 
         this.trail.push(poly)
@@ -159,7 +155,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     }
 
     setVirtualCenter(center: Point) {
-        this.virtualCenter = this
+        this.hasVirtualCenter = true
         
         let output: Point[] = []
         for(let i = 0; i < this.vertices.length; i++) {
@@ -179,7 +175,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
 
     enableTrails(trailLifetime: number, trailMaxLength: number, smoothTrails = false) {
         this.trail = []
-        this.trailLifetime = trailLifetime
+        this.trailLifetime = trailLifetime * 40
         this.trailMaxLength = trailMaxLength
         this.smoothTrails = smoothTrails
 
@@ -236,8 +232,8 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         return this
     }
 
-    setLifetime(lifetime: number) {
-        this.lifetime = lifetime
+    setLifetime(seconds: number) {
+        this.lifetime = seconds * 40
 
         return this
     }

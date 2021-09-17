@@ -94,6 +94,7 @@ export class Firework {
 
         const shardCount = Math.ceil(Math.random() * 6) + 4
         const intensity = Math.random() * clamp(800 * getSizeCoefficient(getWindowArea()), 600, 2500) + 500
+        const relativeVertices = [new Point(-100, 0), new Point(-100, -100), new Point(0, -100)]
 
         for(let i = 0; i < shardCount; i++) {
             const color = Color.genRandColor(new Color(255, 255, 255, 1))
@@ -107,19 +108,17 @@ export class Firework {
             const { x: xComponent, y: yComponent } = position.component(point)
 
             const velocity = new Point(xComponent * (distance/150), yComponent * (distance/150))
-            const relativeVertices = [new Point(-100, 0), new Point(-50, -100)]
 
             shards.push(new Polygon(new Point(position.x, position.y))
+            .setLifetime(2)
             .setVerticesRelative(relativeVertices)
             .setColor(color)
             .setVelocity(velocity)
-            .setLifetime(80)
-            .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * ratio), 30)
-            .animate((_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick/2)).scale(0.1), 30)
+            .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * ratio), 20)
+            .animate((_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick/2)).scale(0.1), 20)
             .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * (1 - ratio)), 20)
-            .setLifetime(0)
             .setVirtualCenter(new Point(50, 50))
-            .enableTrails(7, 4))
+            .enableTrails(0.18, 4))
         }
 
         return { firework, shards }
