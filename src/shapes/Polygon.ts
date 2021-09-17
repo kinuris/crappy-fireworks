@@ -1,6 +1,5 @@
 import { Acceleration, animationLogic, Drawable, Step, Trail, Updatable, Velocity } from "../types";
 import { Animation } from "../util/Animation";
-import { clamp } from "../util/clamp";
 import { Color } from "../util/Color";
 import { Matrix2D } from "../util/Matrix";
 import { Point } from "./Point";
@@ -88,17 +87,16 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
 
         let poly = new Polygon(this.virtualCenter)
         .setVerticesRelative(this.vertices)
-        .setColor(this.color)
-        .setLifetime(this.trailLifetime)
         .setVirtualCenter(new Point(0, 0))
         .popVertices()
+        .setColor(this.color)
+        .setLifetime(this.trailLifetime)
         .animate(animationRatio => Matrix2D.genIdentity().scale(1 - animationRatio), this.trailLifetime)
 
         this.trail.push(poly)
 
-        for(let i = this.trail.length - 1; i >= 0; i--) {
+        for(let i = 0; i < this.trail.length; i++) {
             this.trail[i].update()
-            console.log(this.trail[i].getVertices())
         }
     }
 

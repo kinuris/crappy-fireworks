@@ -9,8 +9,6 @@ import { genTwilightGradient } from "./preset/twilightGradient"
 import { getSizeCoefficient, getWindowArea } from "./util/windowArea"
 import { clamp } from "./util/clamp"
 import { Polygon } from "./shapes/Polygon"
-import { Color } from "./util/Color"
-import { Matrix2D } from "./util/Matrix"
 
 const canvas = document.getElementById('cnv') as HTMLCanvasElement
 const ctx = canvas.getContext('2d')
@@ -81,23 +79,6 @@ canvas.addEventListener('click', e => {
         fade(header)
         first = !first
     }
-
-    // let relativeVertices = [new Point(-100, 0), new Point(-50, -100)]
-    // fireworksArray.push(...Firework.genFireworkAt(new Point(e.x, e.y)))
-    // fireworksArray.push(...Firework.genFirework2At(new Point(e.x, e.y)))
-    // polygonArray.push(new Polygon(new Point(e.x, e.y))
-    // .setVerticesRelative(relativeVertices)
-    // .setColor(Color.genRandColor(new Color(255, 255, 255, 1)))
-    // .setVelocity(new Point(5, -6))
-    // .setAcceleration(new Point(0, 0.2   ))
-    // .animate((_, tick) => {
-    //     return Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.05)
-    // }, 60)
-    // .animate(ratio => Matrix2D.genIdentity().scale(0.05 * (ratio - 1)), 40)
-    // .setLifetime(0)
-    // .setVirtualCenter(new Point(50, 50))
-    // .enableTrails(10, 10)
-    // )
 
     let { firework, shards } = Firework.genFirework3At(new Point(e.x, e.y))
     fireworksArray.push(...firework)
