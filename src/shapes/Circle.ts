@@ -82,7 +82,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
      * - If enableSeparateCollisionLogic was called then you must call checkCollisions and applyCollisions manually
      */
     update(boundingBox?: Rectangle) {
-        if(this.radius <= this.radiusThreshold)
+        if(this.radius < this.radiusThreshold)
             return
 
         if(this.lifetime > 0) 
@@ -160,7 +160,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     // Separate from logic that updates velocity values to ensure clipping does not occur
     // This method is not private to allow for collision checking separate of updates
     private checkCollisionsPrivate(boundingBox: Rectangle) {
-        if(this.radius <= this.radiusThreshold)
+        if(this.radius < this.radiusThreshold)
             return
 
         let { x: xBound, y: yBound } = boundingBox.getDimensions()
@@ -194,7 +194,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     }
 
     draw(context: CanvasRenderingContext2D) {
-        if(this.radius <= this.radiusThreshold)
+        if(this.radius < this.radiusThreshold)
             return
 
         // Draw on HTML Canvas
