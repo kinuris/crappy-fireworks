@@ -30,13 +30,13 @@ export class Stars {
         let shootingStarSpawner = new Rectangle(new Point(Math.random() * (xBound - spawnerWidth), Math.random() * (yBound - spawnerHeight)), spawnerWidth, spawnerHeight)
         
         for(let i = 0; i < Math.ceil(Math.random() * 3) + 1; i++) {
-            let velocityMultiplier = 1 + Math.random() * getSizeCoefficient(getWindowArea())
+            let velocityMultiplier = 1 + Math.random() * getSizeCoefficient(getWindowArea())/2
 
             output.push(new Circle(3 * getSizeCoefficient(getWindowArea()), shootingStarSpawner.getRandomPointWithin())
-            .enableTrails(1, 10, true)
+            .enableTrails(1, 10, 1, true)
             .setSteps(1)
             .setLifetime(5)
-            .setYAccel(0.1)
+            .setYAccel(0.05)
             .setVelocity(new Point(13 * velocityMultiplier, 5 * velocityMultiplier)))
         }
 

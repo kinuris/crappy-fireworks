@@ -34,6 +34,7 @@ window.addEventListener('load', () => {
 window.addEventListener('resize', () => {
     applyWindowSize()
     clearIntervals()
+    twilightGradient = genTwilightGradient(ctx)
     starsArray = []
     populateStars(clamp(500 * getSizeCoefficient(getWindowArea()), 100, 1000))
     startIntervals()
