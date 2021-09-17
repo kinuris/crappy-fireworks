@@ -86,7 +86,9 @@ canvas.addEventListener('click', e => {
 })
 
 let startTime = Date.now()
+let startTimeCull = Date.now()
 let msPerUpdate = 1000/40
+let msPerCull = 1000
 let twilightGradient = genTwilightGradient(ctx)
 
 function animate() {
@@ -96,25 +98,8 @@ function animate() {
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
     
     // Animation Here
-    for(let i = 0; i < fireworksArray.length; i++) {
-        if(fireworksArray[i].getRadius() > 0) {
-            fireworksArray[i].draw(ctx)
-        }
-    }
+        draw()
 
-    for(let i = 0; i < starsArray.length; i++) {
-        starsArray[i].draw(ctx)
-    }
-
-    for(let i = 0; i < polygonArray.length; i++) {
-        if(polygonArray[i].getLifetimeRatio()) {
-            polygonArray[i].draw(ctx)
-        } else {
-            polygonArray.splice(i, 1)
-        }
-    }
-
-    
     // Updates as specified by msPerUpdate
     if(elapsed - startTime > msPerUpdate) {
         startTime = elapsed
@@ -127,11 +112,48 @@ function animate() {
         }
 
         for(let i = 0; i < polygonArray.length; i++) {
-            polygonArray[i].update()
+            if(polygonArray[i].getLifetimeRatio()) {
+                polygonArray[i].update()
+            }
         }
     }
 
+    // Updates as specified by msPerCull
+    if(elapsed - startTimeCull > msPerCull) {
+        startTimeCull = elapsed
+
+        cullReferences()
+    }
+
     requestAnimationFrame(animate)
+}
+
+function draw() {
+    for(let i = 0; i < fireworksArray.length; i++) {
+        fireworksArray[i].draw(ctx)
+    }
+
+    for(let i = 0; i < starsArray.length; i++) {
+        starsArray[i].draw(ctx)
+    }
+
+    for(let i = 0; i < polygonArray.length; i++) {
+        polygonArray[i].draw(ctx)
+    }
+}
+
+function cullReferences() {
+    for(let i = 0; i < fireworksArray.length; i++) {
+        if(fireworksArray[i].getRadius() < fireworksArray[i].getRadiusThreshold()) {
+            fireworksArray.splice(i, 1)
+        }
+    }
+
+    for(let i = 0; i < polygonArray.length; i++) {
+        if(!polygonArray[i].getLifetimeRatio()) {
+            polygonArray.splice(i, 1)
+        }
+    }
 }
 
 requestAnimationFrame(animate)
