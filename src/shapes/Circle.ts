@@ -243,7 +243,7 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     }
 
     // Initialization and setup of trails
-    enableTrails(trailLifetime: number, trailMaxLength: number, smoothTrail = false) {
+    enableTrails(trailLifetime: number, trailMaxLength: number, trailInterval?: number, smoothTrail = false) {
         this.trail = []
         this.hasTrail = true
         this.trailLifetime = trailLifetime

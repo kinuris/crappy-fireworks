@@ -40,7 +40,7 @@ export interface Collisions {
 }
 
 export interface Trail {
-    enableTrails(trailLifetime: number, trailMaxLength: number, smoothTrail?: boolean): this
+    enableTrails(trailLifetime: number, trailMaxLength: number, trailInterval?: number, smoothTrail?: boolean): this
     disableTrails(): this
 }
 

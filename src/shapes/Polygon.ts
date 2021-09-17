@@ -20,6 +20,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     private absolute = false
 
     private trailLifetime: number
+    private trailInterval: number
     private trailMaxLength: number
     private smoothTrails: boolean
     private trail: Polygon[]
@@ -57,7 +58,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
             }
         }
 
-        if(this.smoothTrails && this.trail)
+        if(this.smoothTrails && this.trail && this.tick%this.trailInterval === 0)
             this.applyTrails()
     }
 
@@ -65,7 +66,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         this.incrementTick()
         if(!this.getLifetimeRatio()) return
 
-        if(!this.smoothTrails && this.trail)
+        if(!this.smoothTrails && this.trail && this.tick%this.trailInterval === 0)
             this.applyTrails()
 
         this.applyVelocityAcceleration()
@@ -173,11 +174,12 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         return this
     }
 
-    enableTrails(trailLifetime: number, trailMaxLength: number, smoothTrails = false) {
+    enableTrails(trailLifetime: number, trailMaxLength: number, trailInterval = 1, smoothTrails = false) {
         this.trail = []
         this.trailLifetime = trailLifetime * 40
         this.trailMaxLength = trailMaxLength
         this.smoothTrails = smoothTrails
+        this.trailInterval = trailInterval
 
         return this
     }

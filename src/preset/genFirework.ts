@@ -115,7 +115,7 @@ export class Firework {
             .setColor(color)
             .setVelocity(velocity)
             .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * ratio), 20)
-            .animate((_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick/2)).scale(0.1), 20)
+            .animate((_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick/2) * 2 * Math.PI).scale(0.1), 20)
             .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * (1 - ratio)), 20)
             .setVirtualCenter(new Point(50, 50))
             .enableTrails(0.18, 4))
