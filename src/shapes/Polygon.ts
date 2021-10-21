@@ -25,6 +25,21 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     private smoothTrails: boolean
     private trail: Polygon[]
 
+    static from(position: Point, vertices: Point[], color: Color, vel: Point, accel: Point, animationLogic: { animations: animationLogic[], durations: number[] }, center: Point, trails: {trailLifetime: number, trailMaxLength: number, trailInterval?: number, smoothTrails?: boolean}, lifetime: number) {
+        const poly = new Polygon(position)
+            .setLifetime(lifetime)
+            .setVerticesRelative(vertices)
+            .setColor(color)
+            .setVelocity(vel)
+            .setAcceleration(accel)
+        
+        animationLogic.animations.forEach((animation, index) => {
+            poly.animate(animation, animationLogic.durations[index])
+        })
+        poly.setVirtualCenter(center)
+        return poly.enableTrails(trails.trailLifetime, trails.trailMaxLength, trails.trailInterval, trails.smoothTrails)
+    }
+
     constructor(position: Point) {
         super(position.x, position.y)
     }

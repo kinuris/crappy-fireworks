@@ -2,6 +2,7 @@ import { Circle } from "../shapes/Circle";
 import { Point } from "../shapes/Point";
 import { Polygon } from "../shapes/Polygon";
 import { Rectangle } from "../shapes/Rectangle";
+import { animationLogic } from "../types";
 import { clamp } from "../util/clamp";
 import { Color } from "../util/Color";
 import { Matrix2D } from "../util/Matrix";
@@ -109,16 +110,28 @@ export class Firework {
 
             const velocity = new Point(xComponent * (distance/150), yComponent * (distance/150))
 
-            shards.push(new Polygon(new Point(position.x, position.y))
-            .setLifetime(2)
-            .setVerticesRelative(relativeVertices)
-            .setColor(color)
-            .setVelocity(velocity)
-            .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * ratio), 20)
-            .animate((_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick/2) * 2 * Math.PI).scale(0.1), 20)
-            .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * (1 - ratio)), 20)
-            .setVirtualCenter(new Point(50, 50))
-            .enableTrails(0.18, 4))
+            // shards.push(new Polygon(new Point(position.x, position.y))
+            // .setLifetime(2)
+            // .setVerticesRelative(relativeVertices)
+            // .setColor(color)
+            // .setVelocity(velocity)
+            // .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * ratio), 20)
+            // .animate((_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick/2) * 2 * Math.PI).scale(0.1), 20)
+            // .animate((ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * (1 - ratio)), 20)
+            // .setVirtualCenter(new Point(50, 50))
+            // .enableTrails(0.18, 4))
+
+            const animationLogic = {
+                animations: 
+                [
+                    (ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * ratio),
+                    (_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick/2) * 2 * Math.PI).scale(0.1),
+                    (ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * (1 - ratio))
+                ] as animationLogic[],
+                durations: [20, 20, 20]
+            }
+
+            shards.push(Polygon.from(new Point(position.x, position.y), relativeVertices, color, velocity, new Point(0, 0), animationLogic, new Point(50, 50), { trailLifetime: 0.18, trailMaxLength: 4}, 2))
         }
 
         return { firework, shards }
