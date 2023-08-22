@@ -7,23 +7,23 @@ import { Rectangle } from "./Rectangle";
 
 export class Polygon extends Point implements Acceleration, Velocity, Updatable, Drawable, Step, Trail {
 
-    private vertices: Point[]
+    private vertices: Point[] | undefined
     private animations: Animation[] = []
     private color = new Color(255, 255, 255, 1)
     private acceleration = new Point(0, 0)
     private velocity = new Point(0, 0)
-    private hasVirtualCenter: boolean
+    private hasVirtualCenter: boolean | undefined
     private tick = 0
     private lifetime = 0
     private lifetimeRatio = 1
     private steps = 0
     private absolute = false
 
-    private trailLifetime: number
-    private trailInterval: number
-    private trailMaxLength: number
-    private smoothTrails: boolean
-    private trail: Polygon[]
+    private trailLifetime: number | undefined
+    private trailInterval: number | undefined
+    private trailMaxLength: number | undefined
+    private smoothTrails: boolean | undefined
+    private trail: Polygon[] | undefined
 
     static from(position: Point, vertices: Point[], color: Color, vel: Point, accel: Point, animationLogic: { animations: animationLogic[], durations: number[] }, center: Point, trails: {trailLifetime: number, trailMaxLength: number, trailInterval?: number, smoothTrails?: boolean}, lifetime: number) {
         const poly = new Polygon(position)
@@ -54,13 +54,13 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         if(!this.hasVirtualCenter) {
             context.moveTo(this.x, this.y)
 
-            for(let i = 0; i < this.vertices.length; i++) {
-                context.lineTo(this.vertices[i].x + (this.absolute ? 0 : this.x), this.vertices[i].y + (this.absolute ? 0 : this.y))
+            for(let i = 0; i < this.vertices!.length; i++) {
+                context.lineTo(this.vertices![i].x + (this.absolute ? 0 : this.x), this.vertices![i].y + (this.absolute ? 0 : this.y))
             }
         } else {
-            context.moveTo(this.vertices[0].x + this.x, this.vertices[0].y + this.y)
-            for(let i = 1; i < this.vertices.length; i++) {
-                context.lineTo(this.vertices[i].x + this.x, this.vertices[i].y + this.y)
+            context.moveTo(this.vertices![0].x + this.x, this.vertices![0].y + this.y)
+            for(let i = 1; i < this.vertices!.length; i++) {
+                context.lineTo(this.vertices![i].x + this.x, this.vertices![i].y + this.y)
             }
         }
 
@@ -73,7 +73,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
             }
         }
 
-        if(this.smoothTrails && this.trail && this.tick%this.trailInterval === 0)
+        if(this.smoothTrails && this.trail && this.tick%this.trailInterval! === 0)
             this.applyTrails()
     }
 
@@ -81,7 +81,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         this.incrementTick()
         if(!this.getLifetimeRatio()) return
 
-        if(!this.smoothTrails && this.trail && this.tick%this.trailInterval === 0)
+        if(!this.smoothTrails && this.trail && this.tick%this.trailInterval! === 0)
             this.applyTrails()
 
         this.applyVelocityAcceleration()
@@ -94,21 +94,21 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     }
 
     private applyTrails() {
-        if(this.trail.length > this.trailMaxLength)
-            this.trail.shift()
+        if(this.trail!.length > this.trailMaxLength!)
+            this.trail!.shift()
 
         let poly = new Polygon(this)
-        .setLifetime(this.trailLifetime)
-        .setVerticesRelative(this.vertices)
+        .setLifetime(this.trailLifetime!)
+        .setVerticesRelative(this.vertices!)
         .setVirtualCenter(new Point(0, 0))
         .popVertices()
         .setColor(this.color)
-        .animate(animationRatio => Matrix2D.genIdentity().scale(1 - animationRatio), this.trailLifetime)
+        .animate(animationRatio => Matrix2D.genIdentity().scale(1 - animationRatio), this.trailLifetime!)
 
-        this.trail.push(poly)
+        this.trail!.push(poly)
 
-        for(let i = 0; i < this.trail.length; i++) {
-            this.trail[i].update()
+        for(let i = 0; i < this.trail!.length; i++) {
+            this.trail![i].update()
         }
     }
 
@@ -132,7 +132,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
             return
 
         for(let i = 0; i < this.animations.length; i++) {
-            if(!this.animations[i].animate(this.vertices))
+            if(!this.animations[i].animate(this.vertices!))
                 break
 
             this.animations.splice(i, 1)
@@ -153,9 +153,9 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         this.y += this.velocity.y
 
         if(this.absolute) {
-            for(let i = 0; i < this.vertices.length; i++) {
-                this.vertices[i].x += this.velocity.x
-                this.vertices[i].y += this.velocity.y
+            for(let i = 0; i < this.vertices!.length; i++) {
+                this.vertices![i].x += this.velocity.x
+                this.vertices![i].y += this.velocity.y
             }
         }
     }
@@ -174,8 +174,8 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
         this.hasVirtualCenter = true
         
         let output: Point[] = []
-        for(let i = 0; i < this.vertices.length; i++) {
-            output.push(center.componentDifference(this.vertices[i].multiply(-1)))
+        for(let i = 0; i < this.vertices!.length; i++) {
+            output.push(center.componentDifference(this.vertices![i].multiply(-1)))
         }
 
         this.vertices = output
@@ -200,10 +200,10 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     }
 
     disableTrails() {
-        this.trail = null
-        this.trailLifetime = null
-        this.trailMaxLength = null
-        this.smoothTrails = null
+        this.trail = undefined
+        this.trailLifetime = undefined
+        this.trailMaxLength = undefined
+        this.smoothTrails = undefined
 
         return this
     }
@@ -234,7 +234,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     }
 
     popVertices() {
-        this.vertices.pop()
+        this.vertices!.pop()
 
         return this
     }
@@ -244,7 +244,7 @@ export class Polygon extends Point implements Acceleration, Velocity, Updatable,
     }
 
     addVertices(vertices: Point[]) {
-        this.vertices.push(...vertices)
+        this.vertices!.push(...vertices)
         
         return this
     }

@@ -11,7 +11,7 @@ import { clamp } from "./util/clamp"
 import { Polygon } from "./shapes/Polygon"
 
 const canvas = document.getElementById('cnv') as HTMLCanvasElement
-const ctx = canvas.getContext('2d')
+const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
 const header = document.getElementById('header') as HTMLHeadElement
 let first = true
@@ -19,7 +19,7 @@ let first = true
 let fireworksArray: Circle[] = []
 let starsArray: Circle[] = []
 let polygonArray: Polygon[] = []
-let shootingStarInterval: NodeJS.Timer, randomFireworkInterval: NodeJS.Timer, twinklingStars: NodeJS.Timer
+let shootingStarInterval: any, randomFireworkInterval: any, twinklingStars: any
 let bounds = new Rectangle(new Point(0, 0), window.innerWidth, window.innerHeight)
 
 window.addEventListener('load', () => {

@@ -37,15 +37,15 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     // 'changedX' and 'changedY', along with 'collidedX' and 'collidedY' ensure that collisions are processed without clipping
     private changedY = false
     private changedX = false
-    private collidedX: boolean
-    private collidedY: boolean
+    private collidedX?: boolean
+    private collidedY?: boolean
 
     // The rest of the settings determine the 'trail'
     private hasTrail = false
-    private trailLifetime: number
-    private trailMaxLength: number
-    private smoothTrails: boolean
-    private trail: Circle[]
+    private trailLifetime?: number
+    private trailMaxLength?: number
+    private smoothTrails?: boolean
+    private trail?: Circle[]
 
     /**
      * @remarks extends Point class
@@ -110,17 +110,17 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
 
     private applyTrails() {
         if(this.hasTrail && !this.smoothTrails) {
-            if(this.trail.length > this.trailMaxLength)
-                this.trail.shift()
+            if(this.trail!.length > this.trailMaxLength!)
+                this.trail!.shift()
 
             let circle = new Circle(this.radius, new Point(this.x, this.y))
-            circle.setLifetime(this.trailLifetime)
+            circle.setLifetime(this.trailLifetime!)
             circle.setColor(this.color)
 
-            this.trail.push(circle)
+            this.trail!.push(circle)
 
-            for(let i = 0; i < this.trail.length; i++) {
-                this.trail[i].update()
+            for(let i = 0; i < this.trail!.length; i++) {
+                this.trail![i].update()
             }
         } 
     }
@@ -204,23 +204,23 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
         context.fill()
 
         if(this.hasTrail) {
-            for(let i = 0; i < this.trail.length; i++) {
-                this.trail[i].draw(context)
+            for(let i = 0; i < this.trail!.length; i++) {
+                this.trail![i].draw(context)
             }
 
             // Trail logic is moved here when smoothTrails are enabled
             if(this.smoothTrails) {
-                if(this.trail.length > this.trailMaxLength)
-                    this.trail.shift()
+                if(this.trail!.length > this.trailMaxLength!)
+                    this.trail!.shift()
 
                 let circle = new Circle(this.radius, new Point(this.x, this.y))
-                circle.setLifetime(this.trailLifetime)
+                circle.setLifetime(this.trailLifetime!)
                 circle.setColor(this.color)
 
-                this.trail.push(circle)
+                this.trail!.push(circle)
 
-                for(let i = 0; i < this.trail.length; i++) {
-                    this.trail[i].update()
+                for(let i = 0; i < this.trail!.length; i++) {
+                    this.trail![i].update()
                 }
             }
         }
@@ -260,11 +260,11 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     }
 
     disableTrails() {
-        this.trail = null
+        this.trail = undefined
         this.hasTrail = false
-        this.trailLifetime = null
-        this.trailMaxLength = null
-        this.smoothTrails = null
+        this.trailLifetime = undefined
+        this.trailMaxLength = undefined
+        this.smoothTrails = undefined
 
         return this
     }
@@ -358,11 +358,11 @@ export class Circle extends Point implements Acceleration, Velocity, Drawable, U
     }
 
     getCollidedX() {
-        return this.collidedX
+        return this.collidedX as boolean
     }
 
     getCollidedY() {
-        return this.collidedY
+        return this.collidedY as boolean
     }
 
     setBounce(bounce: number) {
