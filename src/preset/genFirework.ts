@@ -124,14 +124,12 @@ export class Firework {
             const animationLogic = {
                 animations: 
                 [
-                    (ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * ratio),
-                    (_, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick/2) * 2 * Math.PI).scale(0.1),
-                    (ratio, tick) => Matrix2D.genIdentity().rotate(Math.sin(tick)).scale(0.1 * (1 - ratio))
+                    (ratio, tick) => Matrix2D.genIdentity().rotate(Math.cos(tick as number/50) * 100).scale((1 - ratio) * 0.075),
                 ] as animationLogic[],
-                durations: [20, 20, 20]
+                durations: [50]
             }
 
-            shards.push(Polygon.from(new Point(position.x, position.y), relativeVertices, color, velocity, new Point(0, 0), animationLogic, new Point(50, 50), { trailLifetime: 0.18, trailMaxLength: 4}, 2))
+            shards.push(Polygon.from(new Point(position.x, position.y), relativeVertices, color, velocity, new Point(0, 0), animationLogic, new Point(20, 20), { trailLifetime: 0.18, trailMaxLength: 4 }, 2))
         }
 
         return { firework, shards }
